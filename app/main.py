@@ -1,7 +1,7 @@
 from typing import Final
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes 
-from kirana import read_list, add_to_list, remove_from_list, save_list
+from kirana import read_list, add_to_list, remove_from_list
 import os
 
 #\u2705 
@@ -12,18 +12,14 @@ HELP_TEXT = """``` I am Kirana Bot. I can add items to your Grocery list
  Here are a few things you can do:
     <item>    Enter an item to be added to the list
     /help     Show this help text
-    /list     List items in the grocery list
-    /save     Save list ```"""
+    /list     List items in the grocery list```"""
+
 # Commands
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text('Hello !! Thanks for chatting with me! I am Kirana bot')
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(HELP_TEXT, parse_mode='MarkdownV2')
-
-async def save_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    save_list("list.txt")
-    await update.message.reply_text('List saved')
 
 async def list_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = []
@@ -60,14 +56,13 @@ async def error(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 if __name__ == '__main__':
 
-    list_items = read_list("list.txt")
+    list_items = read_list()
 
     print('Starting bot...')
     app = Application.builder().token(TOKEN).build()
 
     app.add_handler(CommandHandler('start', start_command))
     app.add_handler(CommandHandler('help', help_command))
-    app.add_handler(CommandHandler('save', save_command))
     app.add_handler(CommandHandler('list', list_command))
 
 
